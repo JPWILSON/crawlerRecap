@@ -26,21 +26,16 @@ import os
 # need a crawl method that grabs the links in a page
 
 
-web = {}
-seed = "a.html"
-to_crawl = []
-crawled = []
-
-
-def crawl_page(page):
+# def crawl_page(page):
+def get_page_contents(link):
     page_contents = ''
-    with open(page, "r") as f:
+    with open(link, "r") as f:
         s = f.read()
         page_contents += s
     return page_contents
 
 
-def get_link(string):
+def get_new_link(string):
     # takes in a string, finds the first link,
     # returns it along with shortened string starting at end of first link.
     start_link = (string.find("\"")) + 1
@@ -50,9 +45,42 @@ def get_link(string):
     # print(link_one) Check that is only includes the link file and not the quotations or anything else
     return link_one, string[end_link + 1:]
 
-# def get_next_target
-
-# def get_all_links()
+# def get_next_target(get_link(string))  May not need this
 
 
-print(get_link("This is the page a linking to page <a href=\"b.html\">b</a><br>"))
+def get_all_links(link):
+    page_contents = get_page_contents(link)
+    if link not in web:
+        web[link] = []
+        print("web: ", web)
+    else:
+        return
+    if link in crawled:
+        return
+    while page_contents:
+        print("pgct", page_contents)
+        next_link, new_string = get_new_link(page_contents)
+        if next_link:
+            if next_link not in web[link]:
+                web[link].append(next_link)
+            if next_link not in to_crawl and next_link not in crawled:
+                to_crawl.append(next_link)
+        page_contents = new_string
+    crawled.append(link)
+    print(to_crawl)
+    print(crawled)
+    return
+
+
+def crawl_web(seed):
+    to_crawl.append(seed)
+    while to_crawl:
+        get_all_links(to_crawl.pop())
+    return web
+
+
+web = {}
+seed = "a.html"
+to_crawl = []
+crawled = []
+print(crawl_web(seed))
