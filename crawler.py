@@ -38,49 +38,76 @@ def get_page_contents(link):
 def get_new_link(string):
     # takes in a string, finds the first link,
     # returns it along with shortened string starting at end of first link.
-    start_link = (string.find("\"")) + 1
+    start_link = string.find("\"") + 1
+    print('start_link', start_link)
     end_link = string.find('\"', start_link)
+    print('end_link', end_link)
     link_one = string[start_link:end_link]
     # print(type(link_one)) Check that is is a string
-    # print(link_one) Check that is only includes the link file and not the quotations or anything else
-    return link_one, string[end_link + 1:]
+    # Check that is only includes the link file and not the quotations or anything else
+    print('link_one', link_one)
+    return(link_one, string[end_link + 1:])
 
+
+# linker, smaller_test =
+get_new_link("""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    This is the page a linking to page <a href="b.html">b</a><br>
+    This is the page a linking to page <a href="d.html">d</a>
+</body>
+</html>
+""")
+# print(linker)
+# print('gap')
+# print(smaller_test)
 # def get_next_target(get_link(string))  May not need this
 
 
 def get_all_links(link):
-    page_contents = get_page_contents(link)
+    print("even starting?")
     if link not in web:
         web[link] = []
         print("web: ", web)
-    else:
-        return
-    if link in crawled:
-        return
+    page_contents = get_page_contents(link)
     while page_contents:
+        print("get here? ")
         print("pgct", page_contents)
         next_link, new_string = get_new_link(page_contents)
-        if next_link:
+        if len(next_link) > 4:
             if next_link not in web[link]:
                 web[link].append(next_link)
             if next_link not in to_crawl and next_link not in crawled:
                 to_crawl.append(next_link)
-        page_contents = new_string
+        else:
+            page_contents = None
+        if page_contents:
+            page_contents = new_string
     crawled.append(link)
     print(to_crawl)
     print(crawled)
     return
 
 
+web = {}
+to_crawl = []
+crawled = []
+# get_all_links("a.html")
+
+
 def crawl_web(seed):
     to_crawl.append(seed)
     while to_crawl:
-        get_all_links(to_crawl.pop())
+        li = to_crawl.pop()
+        if li not in crawled:
+            get_all_links(li)
+        else:
+            return web
     return web
 
 
-web = {}
-seed = "a.html"
-to_crawl = []
-crawled = []
-print(crawl_web(seed))
+# crawl_web("a.html")
