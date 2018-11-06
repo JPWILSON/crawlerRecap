@@ -43,33 +43,14 @@ def get_new_link(string):
     #print('start_link', start_link)
     end_link = string.find('\"', start_link)
     #print('end_link', end_link)
-    link_one = string[start_link:end_link]
+    if start_link > 0:
+        link_one = string[start_link:end_link]
+    else:
+        return(None, None)
     # print(type(link_one)) Check that is is a string
     # Check that is only includes the link file and not the quotations or anything else
     #print('link_one', link_one)
     return(link_one, string[end_link + 1:])
-
-
-linker, smaller_test = get_new_link("""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-    This is the page a linking to page <a href="b.html">b</a><br>
-    This is the page a linking to page <a href="d.html">d</a>
-</body>
-</html>
-""")
-print(linker)
-print('gap')
-print(smaller_test)
-# def get_next_target(get_link(string))  May not need this
-linker_two, smaller_test_two = get_new_link(smaller_test)
-print(linker_two)
-print('gap two')
-print(smaller_test_two)
 
 
 def get_all_links(link):
@@ -82,12 +63,17 @@ def get_all_links(link):
         print("get here? ")
         print("pgct", page_contents)
         next_link, new_string = get_new_link(page_contents)
-        if len(next_link) > 4:
+        print('how bout here ? ')
+        print('next_link: ', next_link)
+        print('new_string ', new_string)
+        if next_link:
+            print('into this condition ? ')
             if next_link not in web[link]:
                 web[link].append(next_link)
             if next_link not in to_crawl and next_link not in crawled:
                 to_crawl.append(next_link)
         else:
+            print('next_link is not a link: ', next_link)
             page_contents = None
         if page_contents:
             page_contents = new_string
@@ -114,4 +100,4 @@ def crawl_web(seed):
     return web
 
 
-# crawl_web("a.html")
+print(crawl_web("a.html"))
