@@ -1,7 +1,7 @@
 import urllib.request
 import os
 
-
+# SOOOOOOOOOOOOO stupid, I have not been finding links!
 #contents = urllib.request.urlopen('a.html', ).read()
 #__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname('a.html')))
 
@@ -38,19 +38,19 @@ def get_page_contents(link):
 def get_new_link(string):
     # takes in a string, finds the first link,
     # returns it along with shortened string starting at end of first link.
-    start_link = string.find("\"") + 1
-    print('start_link', start_link)
+    a_href = string.find("<a href=")
+    start_link = string.find("\"", a_href) + 1
+    #print('start_link', start_link)
     end_link = string.find('\"', start_link)
-    print('end_link', end_link)
+    #print('end_link', end_link)
     link_one = string[start_link:end_link]
     # print(type(link_one)) Check that is is a string
     # Check that is only includes the link file and not the quotations or anything else
-    print('link_one', link_one)
+    #print('link_one', link_one)
     return(link_one, string[end_link + 1:])
 
 
-# linker, smaller_test =
-get_new_link("""<!DOCTYPE html>
+linker, smaller_test = get_new_link("""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -62,10 +62,14 @@ get_new_link("""<!DOCTYPE html>
 </body>
 </html>
 """)
-# print(linker)
-# print('gap')
-# print(smaller_test)
+print(linker)
+print('gap')
+print(smaller_test)
 # def get_next_target(get_link(string))  May not need this
+linker_two, smaller_test_two = get_new_link(smaller_test)
+print(linker_two)
+print('gap two')
+print(smaller_test_two)
 
 
 def get_all_links(link):
